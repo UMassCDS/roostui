@@ -1,3 +1,4 @@
+.vscode
 tools/analyze_csv_correctness
 data/*_
 

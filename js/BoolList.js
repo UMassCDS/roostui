@@ -35,7 +35,7 @@ export class BoolList {
 	// Advance to next item. Return true if this was successful
 	// (did not go off end of list), false otherwise
 	next() {
-		if (this._currentInd < this.length - 1) {	
+		if (this._currentInd < this.length - 1) {
 			this._currentInd = this._currentInd + 1;
 			return true;
 		}
@@ -55,7 +55,7 @@ export class BoolList {
 	// Return boolean indicating whether ith item is true
 	isTrue(i) {
 		// Can be converted to constant time operation with map or set
-		return this._trueItems.includes(this._items[i]); 
+		return this._trueItems.includes(this._items[i]);
 	}
 
 	// Return boolean indicating whether current item is true

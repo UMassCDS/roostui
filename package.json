@@ -17,9 +17,14 @@
     "type": "git",
     "url": "git+https://github.com/darkecology/roostui.git"
   },
-  "keywords": ["radar", "biology", "birds", "roosts"],
+  "keywords": [
+    "radar",
+    "biology",
+    "birds",
+    "roosts"
+  ],
   "author": "Dan Sheldon <sheldon@cs.umass.edu> (https://people.cs.umass.edu/~sheldon)",
-  "contributors" : [
+  "contributors": [
     "Aroma Rodrigues <aprodrigues@umass.edu>"
   ],
   "license": "MIT",
