@@ -8,7 +8,11 @@ import os
 DIR = "/scratch2/wenlongzhao/roostui/data/all_stations_v2_screened"
 
 for file in os.listdir(DIR):
-    if file.startswith("scans") or file.startswith("tracks") or file.startswith("roost_labels"):
+    if (
+        file.startswith("scans")
+        or file.startswith("tracks")
+        or file.startswith("roost_labels")
+    ):
         lines = open(os.path.join(DIR, file), "r").readlines()
         good_lines = []
         good_lines_set = set()
