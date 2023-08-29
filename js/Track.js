@@ -71,7 +71,7 @@ export default class Track {
 
         tip.style("visibility", "visible")
             .style("left", (bbox.x + bbox.width + 18) + "px")
-            .style("top", bbox.y + (bbox.height / 2) - 35 + "px");
+            .style("top", bbox.y - (bbox.height / 2) - 70 + "px");
 
         // Create radio buttons and labels
         var entering = tip.select("#labels").selectAll("span")

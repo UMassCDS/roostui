@@ -29,6 +29,9 @@ function isObjEmpty(obj) {
 
 //Renders the current frame based on user input  (current frame = dataset, batch, day, time set )
 export function render_frame() {
+
+    console.log("Called render frame!"); 
+    
     var days = window.days;
 
     if (isObjEmpty(days)) return;
@@ -177,6 +180,16 @@ function ViewModule() {
     render_day();
     return (
         <div>
+            <div id="plot">
+            </div>
+            <div id="labeltip" className="tooltip" style={{ visibility: "hidden" }}>
+                <div id="labels">
+                </div>
+                Notes:
+                <input type="text" id="notes"></input>
+                <span id="mapper"></span>
+                <span id="delete_track"></span>
+            </div>
             <img id="img1" />
             <svg id="svg1" />
             <img id="img2" />

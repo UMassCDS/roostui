@@ -6,10 +6,11 @@ import {
 	expand_pattern, url2obj
 } from './utils.js';
 import { BoolList } from './BoolList.js';
-import ViewModule, { save_notes } from './Viewer.js';
+import ViewModule, { save_notes, update_nav_then_render_frame } from './Viewer.js';
 import Track from './Track.js';
 import Box from './Box.js'
 import handle_keydown from './KeymapUtils.js';
+import { increment_last } from './utils.js';
 
 
 /**
@@ -88,6 +89,7 @@ var UI = (function () {
 
 		// Populate data and set event handlers	
 		d3.select("#export").on("click", export_sequences);
+		d3.select("#add-track").on("click", add_track);
 		d3.select("#notes-save").on("click", save_notes);
 		d3.select('body').on('keydown', handle_keydown);
 
@@ -107,6 +109,124 @@ var UI = (function () {
 		Object.assign(nav, url_nav);
 		render_dataset();
 	};
+
+
+	function add_track(event) {
+		console.log("adding track")
+		document.getElementById("viewer").style.cursor = "pointer";
+
+		console.log("The tracks look like ", window.tracks)
+
+		//CREATE TRACK ID
+
+		let prev_id = Array.from(window.tracks)[window.tracks.size - 1][0]
+		let new_id = increment_last(prev_id)
+		console.log("prev id", prev_id, "new ID ", new_id);
+
+		console.log("nav", nav);
+
+		var counter = 0;
+
+		var track_boxes = []
+
+		//get file name
+
+	
+		let t = new Track({
+			id: new_id,
+			date: nav.day,
+			length: counter,
+			tot_score: null,
+			avg_score: null,
+			viewed: true,
+			user_labeled: true,
+			label: "roost",
+			original_label: "roost",
+			notes: "",
+			boxes: track_boxes
+		});
+
+		/* window.tracks[new_id] = t; 
+		update_tracks(); 
+		t.setSelected();  */
+
+		const viewerListener = document.getElementById("viewer");
+
+		viewerListener.addEventListener("click", (event) => {
+			console.log("Boxes", window.boxes)
+
+			var timeSelect = d3.select("#timeSelect option:checked").text();
+			timeSelect = timeSelect.replace(/\D/g, '')
+
+			var dateSplit = d3.select("#dateSelect option:checked").text();
+			dateSplit = new Date(dateSplit).toISOString().slice(0, 10);
+			var dateSelect = dateSplit.replaceAll("-", "");
+			console.log("DATE", dateSelect)
+
+			var scan = frames.currentItem;
+			var f_name = scan.filename; 
+			console.log("filename", f_name)
+
+			const elementBoundingBox = document.getElementById("viewer").getBoundingClientRect()
+			let b = new Box({
+				date: dateSelect,
+				filename: f_name,
+				from_sunrise: "",
+				lat: "",
+				local_date: dateSelect,
+				local_time: timeSelect,
+				lon: "",
+				r: "5",
+				radius: "5000",
+				station: nav.batch.match(/^([^?]+)/,),
+				time: timeSelect,
+				track: t,
+				track_id: new_id,
+				x: event.clientX - elementBoundingBox.x,
+				y: event.clientY - elementBoundingBox.y
+			}
+			)
+
+			console.log("finished box", b)
+			window.boxes.push(b);
+			track_boxes.push(b);
+
+
+			//add box to list of boxes 
+			console.log("boxes by day before", window.boxes_by_day);
+
+			let orig_boxes = window.boxes_by_day.get(dateSelect)
+			console.log("the original boxes, ", orig_boxes)
+			orig_boxes.push(b)
+			console.log("the new boxes, ", orig_boxes)
+			window.boxes_by_day.set(dateSelect, orig_boxes);
+
+
+			console.log("boxes by day after", window.boxes_by_day);
+
+
+			// re-render frame
+			update_nav_then_render_frame();
+
+		});
+
+		window.addEventListener("keyup", (event) => {
+			console.log("added event listener", event.key);
+			if (event.key === 'Enter') {
+				console.log("pressed enter");
+				t.boxes = track_boxes;
+				window.tracks.set(new_id, t);
+				console.log("new tracks", window.tracks)
+				viewerListener.removeEventListener("click", null);
+				update_nav_then_render_frame();
+			}
+
+
+		})
+
+
+		//update all boxes of the track with the full track
+	}
 
 
 	/* -----------------------------------------

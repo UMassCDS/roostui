@@ -107,3 +107,10 @@ export function expand_pattern(spec, data) {
 	var values = fields.map( k => data[k] );
 	return sprintf(pattern, ...values);
 }
+
+
+export function increment_last(v) {
+    return v.replace(/[0-9]+(?!.*[0-9])/, function(match) {
+        return parseInt(match, 10)+1;
+    });
+}
